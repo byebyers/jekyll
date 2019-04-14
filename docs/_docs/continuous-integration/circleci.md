@@ -59,6 +59,16 @@ test:
     - bundle exec htmlproofer ./_site --check-html --disable-external
 ```
 
+### CircleCi v2 Environment Variables
+
+You can store sensitive data in your project settings so they are not visible on your config.yml file. To access Enironment Variables:
+
+1. Visit the 'Jobs' page.
+1. From the projects section of the left, click the gear icon next to your project.
+1. On the left panel of settings, select Environment Variables.
+
+There you can create Variables and store sensitive data as Values. You can call variables in your config file with $VariableName. 
+
 ## Complete Example circle.yml File
 
 When you put it all together, here's an example of what that `circle.yml` file could look like in v1:
@@ -136,6 +146,11 @@ jobs:
       - run:
           name: Install AWS CLI
           command: pip install awscli --upgrade --user
+      - run:
+          name: Configure aws
+          command: |
+                  export aws_access_key_id=$AWS_ACCESS_KEY_ID
+                  export aws_secret_access_key=$AWS_SECRET_ACCESS_KEY
       - run:
           name: Upload to s3
           command: ~/.local/bin/aws s3 sync ./_site s3://$S3_BUCKET_NAME/ --delete --acl public-read
